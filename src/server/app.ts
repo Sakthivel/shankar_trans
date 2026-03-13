@@ -8,6 +8,8 @@ import { errorMiddleware } from "./middleware/error.middleware";
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(helmet());
 app.use(
   cors({
@@ -20,9 +22,10 @@ app.use(cookieParser());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { trustProxy: false, xForwardedForHeader: false, ip: false },
 });
 app.use(limiter);
 

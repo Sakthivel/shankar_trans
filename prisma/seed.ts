@@ -1,7 +1,17 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
+const url = process.env.DATABASE_URL || "";
+let prisma: PrismaClient;
+
+if (url.startsWith("prisma+postgres://") || url.includes("accelerate")) {
+  prisma = new PrismaClient({ accelerateUrl: url });
+} else {
+  const adapter = new PrismaPg({ connectionString: url });
+  prisma = new PrismaClient({ adapter });
+}
 
 async function main() {
   const hashedPassword = await bcrypt.hash("admin123", 12);
