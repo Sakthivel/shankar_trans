@@ -1,0 +1,27 @@
+import { z } from "zod";
+
+export const roadTripSchema = z.object({
+  month: z.string().min(1, "Month is required"),
+  year: z.string().min(1, "Year is required"),
+  vehicleId: z.number().int().positive(),
+  serialNo: z.number().int().positive(),
+  date: z.string().or(z.date()),
+  tripId: z.string().min(1, "Trip ID is required"),
+  gcNo: z.string().min(1, "GC No is required"),
+  driverId: z.number().int().positive(),
+  loadingPlantId: z.number().int().positive(),
+  deliveryLocationId: z.number().int().positive(),
+  quantity: z.number(),
+  tripStartDate: z.string().or(z.date()),
+  tripStartTime: z.string().min(1, "Trip start time is required"),
+  tripEndDate: z.string().or(z.date()),
+  tripEndTime: z.string().min(1, "Trip end time is required"),
+  unloadQuantity: z.number(),
+  shortage: z.number(),
+  startKm: z.number(),
+  closeKm: z.number(),
+  runningKm: z.number(),
+  haltingDaysWithTime: z.string(),
+  gcReceivedStatus: z.boolean(),
+  remarks: z.string().optional(),
+});

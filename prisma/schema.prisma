@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STAFF
+  MANAGER
+  OWNER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Shift {
+  DAY
+  NIGHT
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  userId    String   @unique
+  password  String
+  name      String
+  email     String
+  role      Role     @default(STAFF)
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  approvedLpgTankers       LpgTanker[]       @relation("ApprovedByUser")
+  approvedContractVehicles ContractVehicle[] @relation("ApprovedByUser")
+  approvedRoadTrips        RoadTrip[]        @relation("ApprovedByUser")
+
+  @@map("users")
+}
+
+model Driver {
+  id           Int      @id @default(autoincrement())
+  driverName   String
+  mobileNumber String
+  status       Status   @default(ACTIVE)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  lpgTankers       LpgTanker[]
+  contractVehicles ContractVehicle[]
+  roadTrips        RoadTrip[]
+
+  @@map("drivers")
+}
+
+model Vehicle {
+  id            Int      @id @default(autoincrement())
+  vehicleNumber String   @unique
+  status        Status   @default(ACTIVE)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  lpgTankers       LpgTanker[]
+  contractVehicles ContractVehicle[]
+  roadTrips        RoadTrip[]
+
+  @@map("vehicles")
+}
+
+model LoadingPlant {
+  id           Int      @id @default(autoincrement())
+  loadingPlant String
+  status       Status   @default(ACTIVE)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  lpgTankers LpgTanker[]
+  roadTrips  RoadTrip[]
+
+  @@map("loading_plants")
+}
+
+model DeliveryLocation {
+  id               Int      @id @default(autoincrement())
+  deliveryLocation String
+  status           Status   @default(ACTIVE)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  lpgTankers LpgTanker[]
+  roadTrips  RoadTrip[]
+
+  @@map("delivery_locations")
+}
+
+model LpgTanker {
+  id                   Int      @id @default(autoincrement())
+  month                String
+  year                 String
+  vehicleId            Int
+  serialNo             Int
+  date                 DateTime
+  tripId               String
+  driverId             Int
+  loadingPlantId       Int
+  deliveryLocationId   Int
+  loadQuantityPerTon   Float
+  km                   Float
+  fastag               Float
+  tripStartDate        DateTime
+  tripEndDate          DateTime
+  unloadQuantityPerTon Float
+  shortage             Float
+  wayExpense           Float
+  others               Float
+  dieselGiven          Float
+  excessDiesel         Float
+  dieselAmount         Float
+  advance              Float
+  totalExpense         Float
+  ratePerTon           Float
+  freight              Float
+  approved             Boolean  @default(false)
+  approvedById         Int?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  vehicle          Vehicle          @relation(fields: [vehicleId], references: [id])
+  driver           Driver           @relation(fields: [driverId], references: [id])
+  loadingPlant     LoadingPlant     @relation(fields: [loadingPlantId], references: [id])
+  deliveryLocation DeliveryLocation @relation(fields: [deliveryLocationId], references: [id])
+  approvedBy       User?            @relation("ApprovedByUser", fields: [approvedById], references: [id])
+
+  @@map("lpg_tankers")
+}
+
+model ContractVehicle {
+  id             Int      @id @default(autoincrement())
+  month          String
+  year           String
+  vehicleId      Int
+  serialNo       Int
+  date           DateTime
+  tripId         String
+  driverId       Int
+  workPlace      String
+  shift          Shift
+  workingDetails String
+  startKm        Float
+  closeKm        Float
+  runningKm      Float
+  diesel         Float
+  mileage        Float
+  dieselKm       Float
+  dieselDebit    Float
+  approved       Boolean  @default(false)
+  approvedById   Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  vehicle    Vehicle @relation(fields: [vehicleId], references: [id])
+  driver     Driver  @relation(fields: [driverId], references: [id])
+  approvedBy User?   @relation("ApprovedByUser", fields: [approvedById], references: [id])
+
+  @@map("contract_vehicles")
+}
+
+model RoadTrip {
+  id                 Int      @id @default(autoincrement())
+  month              String
+  year               String
+  vehicleId          Int
+  serialNo           Int
+  date               DateTime
+  tripId             String
+  gcNo               String
+  driverId           Int
+  loadingPlantId     Int
+  deliveryLocationId Int
+  quantity           Float
+  tripStartDate      DateTime
+  tripStartTime      String
+  tripEndDate        DateTime
+  tripEndTime        String
+  unloadQuantity     Float
+  shortage           Float
+  startKm            Float
+  closeKm            Float
+  runningKm          Float
+  haltingDaysWithTime String
+  gcReceivedStatus   Boolean  @default(false)
+  docUploadUrl       String?
+  remarks            String?
+  approved           Boolean  @default(false)
+  approvedById       Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  vehicle          Vehicle          @relation(fields: [vehicleId], references: [id])
+  driver           Driver           @relation(fields: [driverId], references: [id])
+  loadingPlant     LoadingPlant     @relation(fields: [loadingPlantId], references: [id])
+  deliveryLocation DeliveryLocation @relation(fields: [deliveryLocationId], references: [id])
+  approvedBy       User?            @relation("ApprovedByUser", fields: [approvedById], references: [id])
+
+  @@map("road_trips")
+}
