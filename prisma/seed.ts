@@ -9,7 +9,12 @@ let prisma: PrismaClient;
 if (url.startsWith("prisma+postgres://") || url.includes("accelerate")) {
   prisma = new PrismaClient({ accelerateUrl: url });
 } else {
-  const adapter = new PrismaPg({ connectionString: url });
+  const adapter = new PrismaPg({
+    connectionString: url,
+    ssl: url.includes("sslmode=require") || url.includes("prisma.io")
+      ? { rejectUnauthorized: false }
+      : undefined,
+  });
   prisma = new PrismaClient({ adapter });
 }
 
