@@ -33,7 +33,7 @@ export class DriverService {
   }
 
   async delete(id: number) {
-    return prisma.driver.delete({ where: { id } });
+    return prisma.driver.update({ where: { id }, data: { status: "INACTIVE" } });
   }
 }
 

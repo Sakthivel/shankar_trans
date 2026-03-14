@@ -104,8 +104,7 @@ export default function LpgTankerPage() {
 
   const columns = [
     { key: "sno", label: "S.No" },
-    { key: "month", label: "Month" },
-    { key: "year", label: "Year" },
+    { key: "tripId", label: "Trip ID" },
     {
       key: "vehicle",
       label: "Vehicle",
@@ -116,21 +115,10 @@ export default function LpgTankerPage() {
       label: "Driver",
       render: (row: LpgTanker) => row.driver?.driverName ?? "-",
     },
-    { key: "tripId", label: "Trip ID" },
     {
       key: "date",
       label: "Date",
       render: (row: LpgTanker) => formatDate(row.date),
-    },
-    {
-      key: "loadQuantityPerTon",
-      label: "Load Qty",
-      render: (row: LpgTanker) => row.loadQuantityPerTon?.toFixed(2) ?? "-",
-    },
-    {
-      key: "freight",
-      label: "Freight",
-      render: (row: LpgTanker) => row.freight?.toFixed(2) ?? "-",
     },
     {
       key: "approved",
@@ -188,7 +176,7 @@ export default function LpgTankerPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">LPG Tanker</h1>
+        <h1 className="text-2xl font-bold text-indigo-950">LPG Tanker</h1>
         <Link href="/dashboard/lpg-tanker/add">
           <Button>
             <Plus size={18} className="mr-2" />

@@ -33,28 +33,30 @@ export function DataTable({
   onRowClick,
 }: DataTableProps) {
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-slate-200">
+          <thead className="bg-gradient-to-r from-indigo-50 to-slate-50">
             <tr>
               {columns.map((col) => (
-                <th key={col.key} className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <th key={col.key} className="px-4 py-3 text-left text-xs font-semibold text-indigo-900 uppercase tracking-wider">
                   {col.label}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-100">
             {loading ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center text-gray-500">
-                  Loading...
+                <td colSpan={columns.length} className="px-4 py-12 text-center">
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+                  </div>
                 </td>
               </tr>
             ) : data.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center text-gray-500">
+                <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-500">
                   No records found
                 </td>
               </tr>
@@ -62,11 +64,11 @@ export function DataTable({
               data.map((row, i) => (
                 <tr
                   key={i}
-                  className={`hover:bg-gray-50 transition-colors ${onRowClick ? "cursor-pointer" : ""}`}
+                  className={`hover:bg-indigo-50/50 transition-colors ${onRowClick ? "cursor-pointer" : ""}`}
                   onClick={() => onRowClick?.(row)}
                 >
                   {columns.map((col) => (
-                    <td key={col.key} className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td key={col.key} className="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">
                       {col.render ? col.render(row) : String(row[col.key] ?? "")}
                     </td>
                   ))}
@@ -78,8 +80,8 @@ export function DataTable({
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t px-4 py-3">
-          <span className="text-sm text-gray-600">
+        <div className="flex items-center justify-between border-t border-slate-200 px-4 py-3 bg-slate-50/50">
+          <span className="text-sm text-slate-600">
             Page {page} of {totalPages}
           </span>
           <div className="flex gap-2">

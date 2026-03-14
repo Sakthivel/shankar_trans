@@ -137,7 +137,7 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <BarChart3 size={28} className="text-blue-600" />
-        <h2 className="text-2xl font-bold text-gray-900">Reports</h2>
+        <h2 className="text-2xl font-bold text-indigo-950">Reports</h2>
       </div>
 
       <div className="bg-white rounded-xl border shadow-sm p-6">

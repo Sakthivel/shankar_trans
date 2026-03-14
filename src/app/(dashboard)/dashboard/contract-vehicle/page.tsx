@@ -106,8 +106,7 @@ export default function ContractVehiclePage() {
 
   const columns = [
     { key: "sno", label: "S.No" },
-    { key: "month", label: "Month" },
-    { key: "year", label: "Year" },
+    { key: "tripId", label: "Trip ID" },
     {
       key: "vehicle",
       label: "Vehicle",
@@ -117,23 +116,6 @@ export default function ContractVehiclePage() {
       key: "driver",
       label: "Driver",
       render: (row: ContractVehicle) => row.driver?.driverName ?? "-",
-    },
-    { key: "tripId", label: "Trip ID" },
-    { key: "shift", label: "Shift" },
-    {
-      key: "startKm",
-      label: "Start KM",
-      render: (row: ContractVehicle) => row.startKm?.toFixed(2) ?? "-",
-    },
-    {
-      key: "closeKm",
-      label: "Close KM",
-      render: (row: ContractVehicle) => row.closeKm?.toFixed(2) ?? "-",
-    },
-    {
-      key: "runningKm",
-      label: "Running KM",
-      render: (row: ContractVehicle) => row.runningKm?.toFixed(2) ?? "-",
     },
     {
       key: "approved",
@@ -191,7 +173,7 @@ export default function ContractVehiclePage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Contract Vehicle</h1>
+        <h1 className="text-2xl font-bold text-indigo-950">Contract Vehicle</h1>
         <Link href="/dashboard/contract-vehicle/add">
           <Button>
             <Plus size={18} className="mr-2" />

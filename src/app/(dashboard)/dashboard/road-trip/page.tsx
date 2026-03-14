@@ -93,8 +93,7 @@ export default function RoadTripPage() {
 
   const columns = [
     { key: "sno", label: "S.No" },
-    { key: "month", label: "Month" },
-    { key: "year", label: "Year" },
+    { key: "tripId", label: "Trip ID" },
     {
       key: "vehicle",
       label: "Vehicle",
@@ -104,18 +103,6 @@ export default function RoadTripPage() {
       key: "driver",
       label: "Driver",
       render: (row: RoadTrip) => row.driver?.driverName ?? "-",
-    },
-    { key: "tripId", label: "Trip ID" },
-    { key: "gcNo", label: "GC No" },
-    {
-      key: "loadingPlant",
-      label: "Loading Plant",
-      render: (row: RoadTrip) => row.loadingPlant?.loadingPlant ?? "-",
-    },
-    {
-      key: "deliveryLocation",
-      label: "Delivery Location",
-      render: (row: RoadTrip) => row.deliveryLocation?.deliveryLocation ?? "-",
     },
     {
       key: "approved",
@@ -173,7 +160,7 @@ export default function RoadTripPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Road Trip</h1>
+        <h1 className="text-2xl font-bold text-indigo-950">Road Trip</h1>
         <Link href="/dashboard/road-trip/add">
           <Button>
             <Plus size={18} className="mr-2" />

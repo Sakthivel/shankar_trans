@@ -1,1 +1,49 @@
 @import "tailwindcss";
+
+a,
+button,
+[role="button"],
+summary {
+  cursor: pointer;
+}
+
+/* Form validation borders (fires only after user interaction) */
+
+/* Invalid → red */
+input:user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+  border-color: #ef4444 !important;
+}
+input:user-invalid:focus,
+select:user-invalid:focus,
+textarea:user-invalid:focus {
+  border-color: #ef4444 !important;
+  --tw-ring-color: #ef4444 !important;
+}
+
+/* Valid → green */
+input:user-valid:not([type="hidden"]):not([type="submit"]),
+select:user-valid,
+textarea:user-valid {
+  border-color: #22c55e !important;
+}
+input:user-valid:not([type="hidden"]):not([type="submit"]):focus,
+select:user-valid:focus,
+textarea:user-valid:focus {
+  border-color: #22c55e !important;
+  --tw-ring-color: #22c55e !important;
+}
+
+/* Explicit error via prop → always red, overrides :user-valid */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: #ef4444 !important;
+}
+input[aria-invalid="true"]:focus,
+select[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus {
+  border-color: #ef4444 !important;
+  --tw-ring-color: #ef4444 !important;
+}

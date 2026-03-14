@@ -33,7 +33,7 @@ export class LoadingPlantService {
   }
 
   async delete(id: number) {
-    return prisma.loadingPlant.delete({ where: { id } });
+    return prisma.loadingPlant.update({ where: { id }, data: { status: "INACTIVE" } });
   }
 }
 

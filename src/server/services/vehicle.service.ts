@@ -33,7 +33,7 @@ export class VehicleService {
   }
 
   async delete(id: number) {
-    return prisma.vehicle.delete({ where: { id } });
+    return prisma.vehicle.update({ where: { id }, data: { status: "INACTIVE" } });
   }
 }
 

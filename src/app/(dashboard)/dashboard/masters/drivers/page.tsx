@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Edit2, Trash2 } from "lucide-react";
+import { Plus, Edit2, ToggleLeft, ToggleRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { api } from "@/lib/api-client";
 import { DataTable } from "@/components/ui/DataTable";
@@ -33,9 +33,7 @@ export default function DriversPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({ driverName: "", mobileNumber: "" });
   const [submitting, setSubmitting] = useState(false);
 
@@ -108,28 +106,18 @@ export default function DriversPage() {
     }
   };
 
-  const openDeleteModal = (row: Driver) => {
-    setDeletingId(row.id);
-    setDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setDeleteModalOpen(false);
-    setDeletingId(null);
-  };
-
-  const handleDelete = async () => {
-    if (!deletingId) return;
-    setSubmitting(true);
+  const handleToggleStatus = async (row: Driver) => {
+    const newStatus = row.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
     try {
-      await api.delete(`/drivers/${deletingId}`);
-      toast.success("Driver deleted successfully");
-      closeDeleteModal();
+      await api.put(`/drivers/${row.id}`, {
+        driverName: row.driverName,
+        mobileNumber: row.mobileNumber,
+        status: newStatus,
+      });
+      toast.success(`Driver ${newStatus === "ACTIVE" ? "activated" : "deactivated"}`);
       fetchData();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Delete failed");
-    } finally {
-      setSubmitting(false);
+      toast.error(err instanceof Error ? err.message : "Status update failed");
     }
   };
 
@@ -169,13 +157,16 @@ export default function DriversPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              openDeleteModal(row);
+              handleToggleStatus(row);
             }}
           >
-            <Trash2 size={16} />
+            {row.status === "ACTIVE" ? (
+              <ToggleRight size={20} className="text-green-600" />
+            ) : (
+              <ToggleLeft size={20} className="text-red-500" />
+            )}
           </Button>
         </div>
       ),
@@ -185,7 +176,7 @@ export default function DriversPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Drivers</h1>
+        <h1 className="text-2xl font-bold text-indigo-950">Drivers</h1>
         <Button onClick={openAddModal}>
           <Plus size={18} className="mr-2" />
           Add New
@@ -234,26 +225,6 @@ export default function DriversPage() {
             </Button>
           </div>
         </form>
-      </Modal>
-
-      <Modal
-        open={deleteModalOpen}
-        onClose={closeDeleteModal}
-        title="Confirm Delete"
-        size="sm"
-      >
-        <p className="text-gray-600 mb-4">
-          Are you sure you want to delete this driver? This action cannot be
-          undone.
-        </p>
-        <div className="flex justify-end gap-2">
-          <Button variant="secondary" onClick={closeDeleteModal}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={handleDelete} loading={submitting}>
-            Delete
-          </Button>
-        </div>
       </Modal>
     </div>
   );

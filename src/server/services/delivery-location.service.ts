@@ -33,7 +33,7 @@ export class DeliveryLocationService {
   }
 
   async delete(id: number) {
-    return prisma.deliveryLocation.delete({ where: { id } });
+    return prisma.deliveryLocation.update({ where: { id }, data: { status: "INACTIVE" } });
   }
 }
 
